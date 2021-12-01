@@ -9,33 +9,25 @@ function List({ cardNumber }) {
 
   useEffect(() => {
     if (step === 0) getCards(step);
-    if (isFetching) {
+    if (isFetching && list.length < cardNumber) {
       getCards(step);
     }
   }, [isFetching, step]);
 
   const onScroll = (e) => {
-    if (
-      e.target.scrollHeight - (e.target.scrollTop + e.target.clientHeight) <
-        20 &&
-      list.length < cardNumber
-    ) {
+    const widthScroll = e.target.scrollHeight;
+    const widthToTop = e.target.scrollTop;
+    const viewWidth = e.target.clientHeight;
+    if (widthScroll - (widthToTop + viewWidth) < 20) {
       setStep((prevState) => prevState + 5);
       setIsFetchig(true);
     }
-    //window.innerHeight
-    // console.log("scrollHeight", e.target.scrollHeight);
-    // console.log("scrollLeft", e.target.scrollLeft);
-    // console.log("scrollTop", e.target.scrollTop);
-    // console.log("scrollWidth", e.target.scrollWidth);
-    // console.log("clientHeight", e.target.clientHeight);
   };
 
   const getCards = function (step) {
     let cards = [];
     for (let i = step; i < 5 + step; i++) {
       cards.push(<Card key={i} />);
-      console.log(i);
     }
     setIsFetchig(false);
     setList((prevState) => [...prevState, ...cards]);
